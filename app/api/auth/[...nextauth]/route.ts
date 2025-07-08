@@ -15,12 +15,15 @@ const handler = NextAuth({
   session: {
     strategy: 'database',
   },
-  callbacks: {
-    async session({ session, token }) {
-      session.user.id = token.sub;
-      return session;
-    },
+callbacks: {
+  async session({ session, user }) {
+    if (session.user && user?.id) {
+      session.user.email = user.id;
+    }
+    return session;
   },
+},
+
 });
 
 export { handler as GET, handler as POST };
